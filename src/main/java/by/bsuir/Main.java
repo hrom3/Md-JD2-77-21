@@ -5,5 +5,8 @@ public class Main {
         System.out.print("Hello, ");
         System.out.print("Maven and");
         System.out.println(" GIT");
+
+        System.out.println("cherry pick");
+
     }
 }
