@@ -6,7 +6,7 @@
 
     <groupId>by.bsuir</groupId>
     <artifactId>test_jd2_maven</artifactId>
-    <version>1.0.201204001</version>
+    <version>1.0.201204006</version>
     <packaging>jar</packaging>
 
     <properties>
