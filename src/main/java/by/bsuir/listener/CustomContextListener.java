@@ -1,4 +1,4 @@
-package by.bsuir.controller.listener;
+package by.bsuir.listener;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
