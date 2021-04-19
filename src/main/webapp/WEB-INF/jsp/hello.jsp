@@ -14,6 +14,9 @@
         <h1>
             Hello JSP!
         </h1>
+
+        ${userName}
+
         Go to <a href="bye" >
             finish.
         </a>
