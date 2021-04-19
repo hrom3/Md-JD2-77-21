@@ -12,6 +12,6 @@ public class CustomContextListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("Context is Down");;
+        System.out.println("Context is Down");
     }
 }
