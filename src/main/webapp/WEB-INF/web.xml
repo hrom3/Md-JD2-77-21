@@ -9,11 +9,7 @@
         <welcome-file>index.html</welcome-file>
         <welcome-file>index.htm</welcome-file>
     </welcome-file-list>
-    
-    <listener>
-        <listener-class>by.bsuir.listener.CustomContextListener</listener-class>
-    </listener>
-    
+
     <servlet>
         <servlet-name>MainServlet</servlet-name>
         <servlet-class>by.bsuir.controller.FrontController</servlet-class>
@@ -23,8 +19,11 @@
         <url-pattern>/FrontController</url-pattern>
     </servlet-mapping>
 
-    <!--    localhost:8080/application/FrontController-->
+    <listener>
+        <listener-class>by.bsuir.listener.CustomContextListener</listener-class>
+    </listener>
 
+    <!--    localhost:8080/application/FrontController-->
     <servlet>
         <servlet-name>HelloWeb</servlet-name>
         <jsp-file>/WEB-INF/jsp/hello.jsp</jsp-file>
@@ -41,7 +40,6 @@
     </servlet-mapping>
 
     <!--    localhost:8080/application/hello-->
-
     <servlet-mapping>
         <servlet-name>ByeByeWeb</servlet-name>
         <url-pattern>/bye</url-pattern>
@@ -52,10 +50,12 @@
         <filter-class>by.bsuir.filter.CharsetFilter</filter-class>
     </filter>
 
+    <!--
     <filter>
         <filter-name>AuthHeaderFilter</filter-name>
         <filter-class>by.bsuir.filter.AuthHeaderFilter</filter-class>
     </filter>
+    -->
 
     <!--    Ordering in filter mapping defines which filter should be invoked firstly-->
     <filter-mapping>
@@ -63,10 +63,12 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!--
     <filter-mapping>
         <filter-name>AuthHeaderFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    -->
 
     <session-config>
         <session-timeout>10</session-timeout>
