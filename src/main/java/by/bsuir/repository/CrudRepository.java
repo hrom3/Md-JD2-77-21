@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 /*Generic interface for CRUD operations
+ * CRUD = Create Read Update Delete
  * @params K - primary key of object
  *         V - object type*/
 public interface CrudRepository<K, V> {
@@ -12,11 +13,11 @@ public interface CrudRepository<K, V> {
 
     List<V> findAll();
 
-    V findById(K key);
+    V findById(K id);
 
     Optional<V> findOne(K key);
 
     V update(V obj);
 
-    K delete(V obj);
+    void delete(V obj);
 }
