@@ -8,9 +8,10 @@ import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {
 
+    public static final String POSTRGES_DRIVER_NAME = "org.postgresql.Driver";
     public static final String DATABASE_URL = "jdbc:postgresql://localhost:";
     public static final int DATABASE_PORT = 5432;
-    public static final String DATABASE_NAME = "/webinar_database";
+    public static final String DATABASE_NAME = "/student_demo";
     public static final String DATABASE_LOGIN = "postgres";
     public static final String DATABASE_PASSWORD = "postgres";
 
@@ -40,12 +41,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Long delete(User obj) {
+    public void delete(User obj) {
+    }
+
+    @Override
+    public List<User> searchUsersByQuery(String query) {
         return null;
     }
 
     @Override
-    public List<User> serch(String querty) {
+    public Double getUserExpensiveCarPrice(Integer userId) {
         return null;
     }
 }
