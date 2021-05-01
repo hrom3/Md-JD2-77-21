@@ -3,22 +3,23 @@
   User: Hrom
   Date: 15.04.2021
   Time: 21:04
-  To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>Hello</title>
+        <meta http-equiv="Content-Type"
+              content="text/html; chadset=utf-8">
     </head>
     <body>
         <h1>
-            Hello JSP!
+            Hello my friend!
         </h1>
 
-        ${userName}
+        <div>
+            ${userName}
+        </div>
 
-        Go to <a href="bye" >
-            finish.
-        </a>
+        Go to <a href="bye" > finish.</a>
     </body>
 </html>
