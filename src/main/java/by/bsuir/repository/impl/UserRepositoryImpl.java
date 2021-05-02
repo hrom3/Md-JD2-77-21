@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserRepository implements IUserRepository {
+public class UserRepositoryImpl implements IUserRepository {
 
     public static final String POSTRGES_DRIVER_NAME = "org.postgresql.Driver";
     public static final String DATABASE_URL = "jdbc:postgresql://localhost:";
