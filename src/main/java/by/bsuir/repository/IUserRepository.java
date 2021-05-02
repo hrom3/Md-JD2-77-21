@@ -4,7 +4,7 @@ import by.bsuir.domain.User;
 
 import java.util.List;
 
-public interface UserRepository extends CrudRepository<Long, User> {
+public interface IUserRepository extends ICrudRepository<Long, User> {
 
     List<User> searchUsersByQuery(String query);
 

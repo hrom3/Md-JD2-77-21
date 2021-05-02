@@ -7,7 +7,7 @@ import java.util.Optional;
  * CRUD = Create Read Update Delete
  * @params K - primary key of object
  *         V - object type*/
-public interface CrudRepository<K, V> {
+public interface ICrudRepository<K, V> {
 
     V save(V obj);
 

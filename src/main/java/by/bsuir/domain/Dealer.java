@@ -85,12 +85,21 @@ public class Dealer {
         this.created = created;
     }
 
+    public void setCreated() {
+        this.created = new Timestamp(System.currentTimeMillis());
+    }
+
+
     public Timestamp getChanged() {
         return changed;
     }
 
     public void setChanged(Timestamp changed) {
         this.changed = changed;
+    }
+
+    public void setChanged() {
+        this.changed = new Timestamp(System.currentTimeMillis());
     }
 
     public Integer getOpenHour() {

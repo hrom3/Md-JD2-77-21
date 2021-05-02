@@ -20,6 +20,10 @@
            ${userName}
         </div>
 
+        <div>
+            ${dealerName}
+        </div>
+
         Go to <a href="bye" > finish.</a>
     </body>
 </html>

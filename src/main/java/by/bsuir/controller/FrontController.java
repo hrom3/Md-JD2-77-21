@@ -1,8 +1,11 @@
 package by.bsuir.controller;
 
+import by.bsuir.domain.Dealer;
 import by.bsuir.domain.User;
-import by.bsuir.repository.UserRepository;
-import by.bsuir.repository.impl.UserRepositoryImpl;
+import by.bsuir.repository.IDealerRepository;
+import by.bsuir.repository.IUserRepository;
+import by.bsuir.repository.impl.DealerRepositoryImpll;
+import by.bsuir.repository.impl.UserRepository;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +17,11 @@ import java.util.stream.Collectors;
 
 public class FrontController extends HttpServlet {
 
-    public static final UserRepository USER_REPOSITORY = new UserRepositoryImpl();
+    public IUserRepository iUserRepository
+            = new UserRepository();
+
+    public IDealerRepository iDealerRepository
+            = new DealerRepositoryImpll();
 
     public FrontController() {
         super();
@@ -34,17 +41,24 @@ public class FrontController extends HttpServlet {
 
     private void doRequest(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-//        RequestDispatcher dispatcher = req.getRequestDispatcher("/bye");
+ //       System.out.println("I'm here");
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("/hello");
         if (dispatcher != null) {
             System.out.println("Forward will be done!");
 
-            req.setAttribute("userName",
-                    USER_REPOSITORY
+            req.setAttribute("userName", iUserRepository
                             .findAll()
                             .stream()
                             .map(User::getName)
-                            .collect(Collectors.joining(",")));
+                            .collect(Collectors.joining(", ")));
+
+            req.setAttribute("dealerName", iDealerRepository
+                    .findAll()
+                    .stream()
+                    .map(Dealer::getName)
+                    .collect(Collectors.joining(", ")));
+
             dispatcher.forward(req, resp);
         }
     }
