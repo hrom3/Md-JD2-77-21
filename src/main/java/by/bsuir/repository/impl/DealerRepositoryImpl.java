@@ -177,7 +177,32 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
     @Override
     public void delete(Dealer obj) {
+        final String findByIdQuery = "delete from dealer where id = ?";
 
+        try {
+            Class.forName(reader.getProperty(DATABASE_DRIVER_NAME));
+        } catch (ClassNotFoundException e) {
+            System.err.println("JDBC Driver Cannot be loaded!");
+            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+        }
+
+        PreparedStatement statement = null;
+
+        try (Connection connection = DriverManager
+                .getConnection(reader.getProperty(DATABASE_URL),
+                        reader.getProperty(DATABASE_LOGIN),
+                        reader.getProperty(DATABASE_PASSWORD));) {
+            statement = connection
+                    .prepareStatement(findByIdQuery);
+            statement = connection.prepareStatement(findByIdQuery);
+            statement.setLong(1, obj.getId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
     }
 
     @Override
