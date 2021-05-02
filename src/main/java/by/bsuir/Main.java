@@ -33,26 +33,25 @@ public class Main {
         System.out.println();
 
         try {
-            System.out.println(iDealerRepository.findById(22L));
+            System.out.println(iDealerRepository.findById(6L));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
 
-        System.out.println();
-        System.out.println("//______________Save one______________________//");
-        System.out.println();
-
-        Dealer dealer = new Dealer();
-        dealer.setName("Test");
-        dealer.setOpenDate(new Date(2020, 02, 14));
-        dealer.setLocationDescription("test_location");
-        dealer.setLocationId(3L);
-        dealer.setCreated();
-        dealer.setChanged();
-        dealer.setOpenHour(9);
-        dealer.setCloseHour(19);
-
-        System.out.println(iDealerRepository.save(dealer));
+//        System.out.println();
+//        System.out.println("//______________Save one______________________//");
+//        System.out.println();
+//
+//        Dealer dealer = new Dealer();
+//        dealer.setName("Audi Авилон");
+//        dealer.setOpenDate(new Date(1_586_908_800_000L));
+//        dealer.setLocationDescription("Москва, ул. Автозаводская, д. 23, корп. 5");
+//        dealer.setLocationId(3L);
+//        dealer.setCreated();
+//        dealer.setChanged();
+//        dealer.setOpenHour(9);
+//
+//        System.out.println(iDealerRepository.save(dealer));
 
         System.out.println();
         System.out.println("//____________________________________//");
