@@ -10,11 +10,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 
-import static by.bsuir.util.DatabasePropertiesReader.*;
+import static by.bsuir.util.DatabasePropertiesReader.DATABASE_DRIVER_NAME;
+import static by.bsuir.util.DatabasePropertiesReader.DATABASE_LOGIN;
+import static by.bsuir.util.DatabasePropertiesReader.DATABASE_PASSWORD;
+import static by.bsuir.util.DatabasePropertiesReader.DATABASE_URL;
 
-public class DealerRepositoryImpll implements IDealerRepository {
+
+public class DealerRepositoryImpl implements IDealerRepository {
 
     public static final DatabasePropertiesReader reader =
             DatabasePropertiesReader.getInstance();
@@ -126,8 +129,8 @@ public class DealerRepositoryImpll implements IDealerRepository {
         try {
 
             connection = DriverManager.getConnection(reader.getProperty(DATABASE_URL),
-                            reader.getProperty(DATABASE_LOGIN),
-                            reader.getProperty(DATABASE_PASSWORD));
+                    reader.getProperty(DATABASE_LOGIN),
+                    reader.getProperty(DATABASE_PASSWORD));
             statement = connection.prepareStatement(findByID);
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
@@ -190,17 +193,17 @@ public class DealerRepositoryImpll implements IDealerRepository {
     private Dealer parseResultSetAsDealer(ResultSet resultSet)
             throws SQLException {
 
-            Dealer dealer = new Dealer();
-            dealer.setId(resultSet.getLong(ID));
-            dealer.setName(resultSet.getString(NAME));
-            dealer.setOpenDate(resultSet.getDate(OPEN_DATE));
-            dealer.setLocationDescription(resultSet.getString(LOCATION_DESCRIPTION));
-            dealer.setLocationId(resultSet.getLong(LOCATION_ID));
-            dealer.setCreated(resultSet.getTimestamp(CREATED));
-            dealer.setChanged(resultSet.getTimestamp(CHANGED));
-            dealer.setOpenHour(resultSet.getInt(OPEN_HOUR));
-            dealer.setCloseHour(resultSet.getInt(CLOSE_HOUR));
+        Dealer dealer = new Dealer();
+        dealer.setId(resultSet.getLong(ID));
+        dealer.setName(resultSet.getString(NAME));
+        dealer.setOpenDate(resultSet.getDate(OPEN_DATE));
+        dealer.setLocationDescription(resultSet.getString(LOCATION_DESCRIPTION));
+        dealer.setLocationId(resultSet.getLong(LOCATION_ID));
+        dealer.setCreated(resultSet.getTimestamp(CREATED));
+        dealer.setChanged(resultSet.getTimestamp(CHANGED));
+        dealer.setOpenHour(resultSet.getInt(OPEN_HOUR));
+        dealer.setCloseHour(resultSet.getInt(CLOSE_HOUR));
 
-            return dealer;
+        return dealer;
     }
 }
