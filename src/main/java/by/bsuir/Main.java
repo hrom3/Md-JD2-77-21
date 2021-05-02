@@ -4,10 +4,9 @@ import by.bsuir.domain.Dealer;
 import by.bsuir.domain.User;
 import by.bsuir.repository.IDealerRepository;
 import by.bsuir.repository.IUserRepository;
-import by.bsuir.repository.impl.DealerRepositoryImpll;
-import by.bsuir.repository.impl.UserRepository;
+import by.bsuir.repository.impl.DealerRepositoryImpl;
+import by.bsuir.repository.impl.UserRepositoryImpl;
 
-import java.sql.Date;
 import java.util.stream.Collectors;
 
 //Ctrl+W - word checking
@@ -17,8 +16,8 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        IUserRepository iUserRepository = new UserRepository();
-        IDealerRepository iDealerRepository = new DealerRepositoryImpll();
+        IUserRepository iUserRepository = new UserRepositoryImpl();
+        IDealerRepository iDealerRepository = new DealerRepositoryImpl();
 
         System.out.println();
         System.out.println("//______________Find All______________________//");

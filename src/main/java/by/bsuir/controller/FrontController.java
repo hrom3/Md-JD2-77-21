@@ -4,8 +4,8 @@ import by.bsuir.domain.Dealer;
 import by.bsuir.domain.User;
 import by.bsuir.repository.IDealerRepository;
 import by.bsuir.repository.IUserRepository;
-import by.bsuir.repository.impl.DealerRepositoryImpll;
-import by.bsuir.repository.impl.UserRepository;
+import by.bsuir.repository.impl.DealerRepositoryImpl;
+import by.bsuir.repository.impl.UserRepositoryImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 public class FrontController extends HttpServlet {
 
     public IUserRepository iUserRepository
-            = new UserRepository();
+            = new UserRepositoryImpl();
 
     public IDealerRepository iDealerRepository
-            = new DealerRepositoryImpll();
+            = new DealerRepositoryImpl();
 
     public FrontController() {
         super();
