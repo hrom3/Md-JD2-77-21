@@ -4,26 +4,28 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
    http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-        <welcome-file>index.html</welcome-file>
-        <welcome-file>index.htm</welcome-file>
-    </welcome-file-list>
+    <!--
+     <welcome-file-list>
+         <welcome-file>index.jsp</welcome-file>
+         <welcome-file>index.html</welcome-file>
+         <welcome-file>index.htm</welcome-file>
+     </welcome-file-list>
+ -->
 
-    <servlet>
-        <servlet-name>MainServlet</servlet-name>
-        <servlet-class>by.bsuir.controller.FrontController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>MainServlet</servlet-name>
-        <url-pattern>/FrontController</url-pattern>
-    </servlet-mapping>
+     <servlet>
+         <servlet-name>MainServlet</servlet-name>
+         <servlet-class>by.bsuir.controller.FrontController</servlet-class>
+     </servlet>
+     <servlet-mapping>
+         <servlet-name>MainServlet</servlet-name>
+         <url-pattern>/FrontController</url-pattern>
+     </servlet-mapping>
 
-    <listener>
-        <listener-class>by.bsuir.listener.CustomContextListener</listener-class>
-    </listener>
+     <listener>
+         <listener-class>by.bsuir.listener.CustomContextListener</listener-class>
+     </listener>
 
-    <!--    localhost:8080/application/FrontController-->
+     <!--    localhost:8080/application/FrontController-->
     <servlet>
         <servlet-name>HelloWeb</servlet-name>
         <jsp-file>/WEB-INF/jsp/hello.jsp</jsp-file>

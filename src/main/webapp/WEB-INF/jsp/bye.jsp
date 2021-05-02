@@ -12,9 +12,9 @@
               content="text/html; chadset=utf-8">
     </head>
     <body>
-        <h2>
+        <h1>
           Bye-bye page!
-        </h2>
+        </h1>
         <h3>
           Go to <a href="index.jsp"> index.</a>
         </h3>
