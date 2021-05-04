@@ -64,7 +64,7 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
             statement.executeUpdate();
 
-            Long insertedId;
+            long insertedId;
             ResultSet lastIdResultSet = lastInsertId.executeQuery();
             if (lastIdResultSet.next()) {
                 insertedId = lastIdResultSet.getLong("lastInsertId");
@@ -99,7 +99,7 @@ public class DealerRepositoryImpl implements IDealerRepository {
                         reader.getProperty(DATABASE_LOGIN),
                         reader.getProperty(DATABASE_PASSWORD));
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(findAllQuery);) {
+             ResultSet resultSet = statement.executeQuery(findAllQuery)) {
 
             while (resultSet.next()) {
                 result.add(parseResultSetAsDealer(resultSet));
@@ -122,16 +122,12 @@ public class DealerRepositoryImpl implements IDealerRepository {
             throw new RuntimeException("JDBC Driver Cannot be loaded!");
         }
 
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet;
+        try(Connection connection = DriverManager.getConnection(reader.getProperty(DATABASE_URL),
+        reader.getProperty(DATABASE_LOGIN),
+                reader.getProperty(DATABASE_PASSWORD));
+            PreparedStatement statement = connection.prepareStatement(findByID)) {
 
-        try {
-
-            connection = DriverManager.getConnection(reader.getProperty(DATABASE_URL),
-                    reader.getProperty(DATABASE_LOGIN),
-                    reader.getProperty(DATABASE_PASSWORD));
-            statement = connection.prepareStatement(findByID);
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
 
@@ -144,23 +140,6 @@ public class DealerRepositoryImpl implements IDealerRepository {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("SQL Issues!");
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
-
-            }
-
-
         }
     }
 
@@ -172,7 +151,42 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
     @Override
     public Dealer update(Dealer obj) {
-        return null;
+        final String updateDealerQuery = "update  dealer set name = ?, " +
+                "open_date= ?, location_description= ?, location_id= ?, " +
+                "created= ?, changed= ?, open_hour= ?, close_hour= ? " +
+                "where id = ?";
+
+        try {
+            Class.forName(reader.getProperty(DATABASE_DRIVER_NAME));
+        } catch (ClassNotFoundException e) {
+            System.err.println("JDBC Driver Cannot be loaded!");
+            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+        }
+
+        try (Connection connection = DriverManager.
+                getConnection(reader.getProperty(DATABASE_URL),
+                        reader.getProperty(DATABASE_LOGIN),
+                        reader.getProperty(DATABASE_PASSWORD));
+             PreparedStatement statement = connection.
+                     prepareStatement(updateDealerQuery)) {
+
+            statement.setString(1, obj.getName());
+            statement.setDate(2, new Date(obj.getOpenDate().getTime()));
+            statement.setString(3, obj.getLocationDescription());
+            statement.setLong(4, obj.getLocationId());
+            statement.setTimestamp(5, obj.getCreated());
+            statement.setTimestamp(6, obj.getChanged());
+            statement.setInt(7, obj.getOpenHour());
+            statement.setInt(8, obj.getCloseHour());
+            statement.setLong(9, obj.getId());
+
+            statement.executeUpdate();
+            return findById(obj.getId());
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
     }
 
     @Override
@@ -191,9 +205,7 @@ public class DealerRepositoryImpl implements IDealerRepository {
         try (Connection connection = DriverManager
                 .getConnection(reader.getProperty(DATABASE_URL),
                         reader.getProperty(DATABASE_LOGIN),
-                        reader.getProperty(DATABASE_PASSWORD));) {
-            statement = connection
-                    .prepareStatement(findByIdQuery);
+                        reader.getProperty(DATABASE_PASSWORD))) {
             statement = connection.prepareStatement(findByIdQuery);
             statement.setLong(1, obj.getId());
 
@@ -202,6 +214,14 @@ public class DealerRepositoryImpl implements IDealerRepository {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("SQL Issues!");
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
         }
     }
 

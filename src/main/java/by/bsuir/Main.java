@@ -8,7 +8,10 @@ import by.bsuir.repository.impl.DealerRepositoryImpl;
 import by.bsuir.repository.impl.UserRepositoryImpl;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 //Ctrl+W - word checking
@@ -57,7 +60,7 @@ public class Main {
 //        System.out.println(iDealerRepository.save(dealer));
 
         System.out.println();
-        System.out.println("//______________Save one and delete______________________//");
+        System.out.println("//______________Save dealer______________________//");
         System.out.println();
 
         Dealer dealer = new Dealer();
@@ -71,9 +74,27 @@ public class Main {
         dealer.setCloseHour(21);
 
         dealer = iDealerRepository.save(dealer);
+
         System.out.println(dealer);
-        Long id = dealer.getId();
+
+        System.out.println();
+        System.out.println("//______________Update dealer______________________//");
+        System.out.println();
+
+        dealer.setName("Test_after_update");
+        dealer.setOpenDate(new Date(8_586_000_000_000L));
+        dealer.setLocationDescription(null);
+        dealer = iDealerRepository.update(dealer);
+
+        System.out.println(dealer);
+
+        System.out.println();
+        System.out.println("//______________Delete dealer______________________//");
+        System.out.println();
+
+        long id = dealer.getId();
         iDealerRepository.delete(dealer);
+
 
         System.out.println();
         System.out.println("//____________________________________//");
