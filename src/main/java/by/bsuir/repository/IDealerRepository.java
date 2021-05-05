@@ -9,5 +9,5 @@ public interface IDealerRepository extends ICrudRepository <Long, Dealer> {
 
     List<Dealer> searchDealersByQuery(String query);
 
-    List<Dealer> searchDealersForUser(User user);
+    List<String> searchDealersForUser(User user);
 }

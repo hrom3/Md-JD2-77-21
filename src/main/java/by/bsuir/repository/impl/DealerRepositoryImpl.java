@@ -49,7 +49,8 @@ public class DealerRepositoryImpl implements IDealerRepository {
                 getConnection(reader.getProperty(DATABASE_URL),
                         reader.getProperty(DATABASE_LOGIN),
                         reader.getProperty(DATABASE_PASSWORD));
-             PreparedStatement statement = connection.prepareStatement(insertDealerQuery);
+             PreparedStatement statement =
+                     connection.prepareStatement(insertDealerQuery);
              PreparedStatement lastInsertId = connection.prepareStatement(
                      "SELECT currval('dealer_id_seq') as lastInsertId")) {
 
@@ -123,10 +124,11 @@ public class DealerRepositoryImpl implements IDealerRepository {
         }
 
         ResultSet resultSet;
-        try(Connection connection = DriverManager.getConnection(reader.getProperty(DATABASE_URL),
-        reader.getProperty(DATABASE_LOGIN),
-                reader.getProperty(DATABASE_PASSWORD));
-            PreparedStatement statement = connection.prepareStatement(findByID)) {
+        try (Connection connection =
+                     DriverManager.getConnection(reader.getProperty(DATABASE_URL),
+                             reader.getProperty(DATABASE_LOGIN),
+                             reader.getProperty(DATABASE_PASSWORD));
+             PreparedStatement statement = connection.prepareStatement(findByID)) {
 
             statement.setLong(1, id);
             resultSet = statement.executeQuery();
@@ -143,10 +145,9 @@ public class DealerRepositoryImpl implements IDealerRepository {
         }
     }
 
-
     @Override
     public Optional<Dealer> findOne(Long key) {
-        return Optional.empty();
+        return Optional.of(findById(key));
     }
 
     @Override
@@ -231,8 +232,46 @@ public class DealerRepositoryImpl implements IDealerRepository {
     }
 
     @Override
-    public List<Dealer> searchDealersForUser(User user) {
-        return null;
+    public List<String> searchDealersForUser(User user) {
+
+        Long id = user.getId();
+
+        final String findDealersForUser = "select search_dealers_for_user(?)";
+
+        List<String> result = new ArrayList<>();
+
+        try {
+            Class.forName(reader.getProperty(DATABASE_DRIVER_NAME));
+        } catch (ClassNotFoundException e) {
+            System.err.println("JDBC Driver Cannot be loaded!");
+            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+        }
+
+        ResultSet resultSet;
+        try (Connection connection =
+                     DriverManager.getConnection(reader.getProperty(DATABASE_URL),
+                             reader.getProperty(DATABASE_LOGIN),
+                             reader.getProperty(DATABASE_PASSWORD));
+             PreparedStatement statement =
+                     connection.prepareStatement(findDealersForUser)) {
+
+            statement.setLong(1, id);
+            resultSet = statement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new NoSuchEntityException("No such dealer or user #" + id
+                        +" does not have car");
+            }
+            while (resultSet.next()) {
+                result.add(resultSet.getString("search_dealers_for_user"));
+            }
+            return result;
+
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
     }
 
     private Dealer parseResultSetAsDealer(ResultSet resultSet)

@@ -1,6 +1,7 @@
 package by.bsuir.repository.impl;
 
 import by.bsuir.domain.User;
+import by.bsuir.exception.NoSuchEntityException;
 import by.bsuir.repository.IUserRepository;
 import org.apache.commons.lang3.StringUtils;
 
@@ -67,7 +68,39 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public User findById(Long key) {
-        return null;
+        final String findById = "select * from users where id = ?";
+
+        Connection connection;
+        PreparedStatement statement;
+        ResultSet rs;
+
+        try {
+            Class.forName(POSTRGES_DRIVER_NAME);
+        } catch (ClassNotFoundException e) {
+            System.err.println("JDBC Driver Cannot be loaded!");
+            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+        }
+
+        String jdbcURL = StringUtils.join(DATABASE_URL, DATABASE_PORT, DATABASE_NAME);
+
+        try {
+            connection = DriverManager.getConnection(jdbcURL, DATABASE_LOGIN, DATABASE_PASSWORD);
+            statement = connection.prepareStatement(findById);
+            statement.setLong(1, key);
+            rs = statement.executeQuery();
+            //Row mapping
+            if (rs.next()) {
+                User user = new User();
+                user = parseResultSetAsUser(rs);
+
+                return user;
+            }
+
+            throw new NoSuchEntityException("No such user with id:" + key);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
     }
 
     @Override
