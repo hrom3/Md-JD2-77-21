@@ -33,6 +33,15 @@ public class Main {
             System.out.println(dealer);
         }
 
+
+        System.out.println();
+        System.out.println("//______________Find by name ______________________//");
+        System.out.println();
+
+        for (Dealer dealer : iDealerRepository.searchDealersByQuery("aud")) {
+            System.out.println(dealer);
+        }
+
         System.out.println();
         System.out.println("//______________Find one______________________//");
         System.out.println();
@@ -112,6 +121,10 @@ public class Main {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+
+
+
+
 
 
 

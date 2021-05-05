@@ -5,6 +5,7 @@ import by.bsuir.domain.User;
 import by.bsuir.exception.NoSuchEntityException;
 import by.bsuir.repository.IDealerRepository;
 import by.bsuir.util.DatabasePropertiesReader;
+import lombok.experimental.NonFinal;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -228,7 +229,39 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
     @Override
     public List<Dealer> searchDealersByQuery(String query) {
-        return null;
+        String srtr1 = ("'%").concat(query).concat("%'");
+
+        final String findByString = "select * from dealer where name ilike "
+                + srtr1 ;
+
+        List<Dealer> result = new ArrayList<>();
+
+        try {
+            Class.forName(reader.getProperty(DATABASE_DRIVER_NAME));
+        } catch (ClassNotFoundException e) {
+            System.err.println("JDBC Driver Cannot be loaded!");
+            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+        }
+
+        ResultSet resultSet;
+        try (Connection connection =
+                     DriverManager.getConnection(reader.getProperty(DATABASE_URL),
+                             reader.getProperty(DATABASE_LOGIN),
+                             reader.getProperty(DATABASE_PASSWORD));
+             PreparedStatement statement = connection.prepareStatement(findByString)) {
+
+    //        statement.setString(1, stringForSearch);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                result.add(parseResultSetAsDealer(resultSet));
+            }
+            return result;
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
     }
 
     @Override
