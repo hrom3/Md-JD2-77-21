@@ -1,3 +1,5 @@
+/*
+
 package by.bsuir.util;
 
 import java.util.ResourceBundle;
@@ -25,3 +27,5 @@ public class DatabasePropertiesReader {
         return (String) resourceBundle.getObject(key);
     }
 }
+
+*/

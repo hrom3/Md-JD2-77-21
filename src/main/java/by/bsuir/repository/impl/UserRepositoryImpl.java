@@ -1,23 +1,27 @@
 package by.bsuir.repository.impl;
 
+import by.bsuir.beans.DatabaseProperties;
 import by.bsuir.domain.User;
 import by.bsuir.exception.NoSuchEntityException;
 import by.bsuir.repository.IUserRepository;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository("userRepository")
 public class UserRepositoryImpl implements IUserRepository {
 
-    public static final String POSTRGES_DRIVER_NAME = "org.postgresql.Driver";
-    public static final String DATABASE_URL = "jdbc:postgresql://localhost:";
-    public static final int DATABASE_PORT = 5432;
-    public static final String DATABASE_NAME = "/student_demo";
-    public static final String DATABASE_LOGIN = "postgres";
-    public static final String DATABASE_PASSWORD = "postgres";
+    @Autowired
+    //@Qualifier("databaseProperties")
+    private DatabaseProperties properties;
+
+   // public static final DatabasePropertiesReader reader = DatabasePropertiesReader.getInstance();
 
     private static final String ID = "id";
     private static final String NAME = "name";
@@ -29,6 +33,13 @@ public class UserRepositoryImpl implements IUserRepository {
     private static final String CREATED = "created";
     private static final String CHANGED = "changed";
 
+    private static final String DRIVER_NOT_LOADED =
+            "JDBC Driver Cannot be loaded!";
+
+    public UserRepositoryImpl() {
+    }
+
+
     @Override
     public User save(User obj) {
         return null;
@@ -38,21 +49,23 @@ public class UserRepositoryImpl implements IUserRepository {
     public List<User> findAll() {
 
         final String findAllQuery = "select * from users order by id";
+        final String driverName = properties.getDriverName();
 
         List<User> result = new ArrayList<>();
 
         try {
-            Class.forName(POSTRGES_DRIVER_NAME);
+            Class.forName(driverName);
         } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver Cannot be loaded!");
-            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
         }
 
-        String jdbcUrl = StringUtils.join(DATABASE_URL, DATABASE_PORT,
-                DATABASE_NAME);
+        String jdbcURL = properties.getUrl();
+        String login = properties.getLogin();
+        String password = properties.getPassword();
 
-        try (Connection connection = DriverManager.getConnection(jdbcUrl,
-                DATABASE_LOGIN,DATABASE_PASSWORD);
+        try (Connection connection = DriverManager.getConnection(jdbcURL,
+                login,password);
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(findAllQuery);) {
 
@@ -69,22 +82,25 @@ public class UserRepositoryImpl implements IUserRepository {
     @Override
     public User findById(Long key) {
         final String findById = "select * from users where id = ?";
+        final String driverName = properties.getDriverName();
 
         Connection connection;
         PreparedStatement statement;
         ResultSet rs;
 
         try {
-            Class.forName(POSTRGES_DRIVER_NAME);
+            Class.forName(driverName);
         } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver Cannot be loaded!");
-            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
         }
 
-        String jdbcURL = StringUtils.join(DATABASE_URL, DATABASE_PORT, DATABASE_NAME);
+        String jdbcURL = properties.getUrl();
+        String login = properties.getLogin();
+        String password = properties.getPassword();
 
         try {
-            connection = DriverManager.getConnection(jdbcURL, DATABASE_LOGIN, DATABASE_PASSWORD);
+            connection = DriverManager.getConnection(jdbcURL, login, password);
             statement = connection.prepareStatement(findById);
             statement.setLong(1, key);
             rs = statement.executeQuery();

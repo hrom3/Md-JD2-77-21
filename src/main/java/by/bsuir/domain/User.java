@@ -22,6 +22,12 @@ public class User {
     public  User() {
     }
 
+    public User(Long id, String name, String surname) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+    }
+
     public User(Long id, String name, String surname, Date birthDay,
                 String login, Float weight, boolean isDeleted,
                 Timestamp created, Timestamp changed) {
