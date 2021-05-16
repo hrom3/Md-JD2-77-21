@@ -5,7 +5,6 @@ import by.bsuir.domain.User;
 import by.bsuir.exception.NoSuchEntityException;
 import by.bsuir.repository.IDealerRepository;
 
-import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -19,13 +18,9 @@ import java.util.Optional;
 @Repository("dealerRepository")
 public class DealerRepositoryImpl implements IDealerRepository {
 
-//    public static final DatabasePropertiesReader reader = DatabasePropertiesReader.getInstance();
-
     @Autowired
-    @Qualifier("databaseProperties")
-    //@Inject
-    //@Named - JSR-330
     // = getAnnotationSpringContext().getBean(DatabaseProperties.class); - will work with @Autowired
+    @Qualifier("databaseProperties")
     // = getAnnotationSpringContext().getBean("databaseProperties", DatabaseProperties.class); - will work with @Autowired + @Qualifier
     private DatabaseProperties properties;
 
@@ -39,6 +34,10 @@ public class DealerRepositoryImpl implements IDealerRepository {
     private static final String OPEN_HOUR = "open_hour";
     private static final String CLOSE_HOUR = "close_hour";
 
+    private static final String DRIVER_NOT_LOADED =
+            "JDBC Driver Cannot be loaded!";
+    private static final String SQL_ISSUE ="SQL Issues!";
+
     @Override
     public Dealer save(Dealer obj) {
         final String insertDealerQuery = "insert into dealer (name, open_date," +
@@ -46,11 +45,10 @@ public class DealerRepositoryImpl implements IDealerRepository {
                 "open_hour, close_hour) values (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
-            //Class.forName(reader.getProperty(DATABASE_DRIVER_NAME));
             Class.forName(properties.getDriverName());
         } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver Cannot be loaded!");
-            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
         }
 
         String jdbcURL = properties.getUrl();
@@ -88,7 +86,7 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException("SQL Issues!");
+            throw new RuntimeException(SQL_ISSUE);
         }
     }
 
@@ -99,11 +97,10 @@ public class DealerRepositoryImpl implements IDealerRepository {
         List<Dealer> result = new ArrayList<>();
 
         try {
-            //Class.forName(reader.getProperty(DATABASE_DRIVER_NAME));
             Class.forName(properties.getDriverName());
         } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver Cannot be loaded!");
-            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
         }
 
         String jdbcURL = properties.getUrl();
@@ -121,7 +118,7 @@ public class DealerRepositoryImpl implements IDealerRepository {
             return result;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException("SQL Issues!");
+            throw new RuntimeException(SQL_ISSUE);
         }
     }
 
@@ -130,11 +127,10 @@ public class DealerRepositoryImpl implements IDealerRepository {
         final String findByID = "select * from dealer where id = ?";
 
         try {
-            //Class.forName(reader.getProperty(DATABASE_DRIVER_NAME));
             Class.forName(properties.getDriverName());
         } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver Cannot be loaded!");
-            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
         }
 
         String jdbcURL = properties.getUrl();
@@ -157,7 +153,7 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException("SQL Issues!");
+            throw new RuntimeException(SQL_ISSUE);
         }
     }
 
@@ -168,17 +164,16 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
     @Override
     public Dealer update(Dealer obj) {
-        final String updateDealerQuery = "update  dealer set name = ?, " +
+        final String updateDealerQuery = "update dealer set name = ?, " +
                 "open_date= ?, location_description= ?, location_id= ?, " +
                 "created= ?, changed= ?, open_hour= ?, close_hour= ? " +
                 "where id = ?";
 
         try {
-            //Class.forName(reader.getProperty(DATABASE_DRIVER_NAME));
             Class.forName(properties.getDriverName());
         } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver Cannot be loaded!");
-            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
         }
 
         String jdbcURL = properties.getUrl();
@@ -205,7 +200,7 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException("SQL Issues!");
+            throw new RuntimeException(SQL_ISSUE);
         }
     }
 
@@ -214,11 +209,10 @@ public class DealerRepositoryImpl implements IDealerRepository {
         final String findByIdQuery = "delete from dealer where id = ?";
 
         try {
-            //Class.forName(reader.getProperty(DATABASE_DRIVER_NAME));
             Class.forName(properties.getDriverName());
         } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver Cannot be loaded!");
-            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
         }
 
         PreparedStatement statement = null;
@@ -236,7 +230,7 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException("SQL Issues!");
+            throw new RuntimeException(SQL_ISSUE);
         } finally {
             if (statement != null) {
                 try {
@@ -258,11 +252,10 @@ public class DealerRepositoryImpl implements IDealerRepository {
         List<Dealer> result = new ArrayList<>();
 
         try {
-            //Class.forName(reader.getProperty(DATABASE_DRIVER_NAME));
             Class.forName(properties.getDriverName());
         } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver Cannot be loaded!");
-            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
         }
 
         String jdbcURL = properties.getUrl();
@@ -284,7 +277,7 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException("SQL Issues!");
+            throw new RuntimeException(SQL_ISSUE);
         }
     }
 
@@ -301,8 +294,8 @@ public class DealerRepositoryImpl implements IDealerRepository {
             //.forName(reader.getProperty(DATABASE_DRIVER_NAME));
             Class.forName(properties.getDriverName());
         } catch (ClassNotFoundException e) {
-            System.err.println("JDBC Driver Cannot be loaded!");
-            throw new RuntimeException("JDBC Driver Cannot be loaded!");
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
         }
 
         String jdbcURL = properties.getUrl();
@@ -330,7 +323,7 @@ public class DealerRepositoryImpl implements IDealerRepository {
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException("SQL Issues!");
+            throw new RuntimeException(SQL_ISSUE);
         }
     }
 

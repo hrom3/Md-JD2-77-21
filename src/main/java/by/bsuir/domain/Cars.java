@@ -1,11 +1,14 @@
 package by.bsuir.domain;
 
+import lombok.Builder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.sql.Date;
 import java.util.Objects;
 
+
+@Builder
 public class Cars {
     private Long id;
     private Long dealerId;

@@ -21,8 +21,6 @@ public class UserRepositoryImpl implements IUserRepository {
     //@Qualifier("databaseProperties")
     private DatabaseProperties properties;
 
-   // public static final DatabasePropertiesReader reader = DatabasePropertiesReader.getInstance();
-
     private static final String ID = "id";
     private static final String NAME = "name";
     private static final String SURNAME = "surname";
@@ -35,6 +33,7 @@ public class UserRepositoryImpl implements IUserRepository {
 
     private static final String DRIVER_NOT_LOADED =
             "JDBC Driver Cannot be loaded!";
+    private static final String SQL_ISSUE ="SQL Issues!";
 
     public UserRepositoryImpl() {
     }
@@ -42,7 +41,55 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public User save(User obj) {
-        return null;
+        final String insertUserQuery = "insert into users (name, surname," +
+                " birth_date, login, weight, is_deleted, " +
+                "created, changed) values (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            Class.forName(properties.getDriverName());
+        } catch (ClassNotFoundException e) {
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
+        }
+
+        String jdbcURL = properties.getUrl();
+        String login = properties.getLogin();
+        String password = properties.getPassword();
+
+        try (Connection connection = DriverManager.
+                getConnection(jdbcURL, login, password);
+             PreparedStatement statement =
+                     connection.prepareStatement(insertUserQuery);
+             PreparedStatement lastInsertId = connection.prepareStatement(
+                     "SELECT currval('users_id_seq') as lastInsertId")) {
+
+            statement.setString(1, obj.getName());
+            statement.setString(2,obj.getSurname());
+            statement.setDate(3, new Date(obj.getBirthDay().getTime()));
+            statement.setString(4, obj.getLogin());
+            statement.setFloat(5, obj.getWeight());
+            statement.setBoolean(6, obj.isDeleted());
+            statement.setTimestamp(7, obj.getCreated());
+            statement.setTimestamp(8, obj.getChanged());
+
+
+            statement.executeUpdate();
+
+            long insertedId;
+            ResultSet lastIdResultSet = lastInsertId.executeQuery();
+            if (lastIdResultSet.next()) {
+                insertedId = lastIdResultSet.getLong("lastInsertId");
+            } else {
+                throw new RuntimeException("We cannot read sequence " +
+                        "last value during User creation!");
+            }
+
+            return findById(insertedId);
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException(SQL_ISSUE);
+        }
     }
 
     @Override
@@ -121,16 +168,86 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public Optional<User> findOne(Long key) {
-        return Optional.empty();
+        return Optional.of(findById(key));
     }
 
     @Override
     public User update(User obj) {
-        return null;
+        final String updateUserQuery = "update users set name = ?, surname= ?," +
+                " birth_date= ?, login= ?, weight= ?, is_deleted= ?, created= ?," +
+                " changed= ? WHERE id = 6";
+
+        try {
+            Class.forName(properties.getDriverName());
+        } catch (ClassNotFoundException e) {
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
+        }
+
+        String jdbcURL = properties.getUrl();
+        String login = properties.getLogin();
+        String password = properties.getPassword();
+
+        try (Connection connection = DriverManager.
+                getConnection(jdbcURL, login, password);
+             PreparedStatement statement = connection.
+                     prepareStatement(updateUserQuery)) {
+
+            statement.setString(1, obj.getName());
+            statement.setString(2,obj.getSurname());
+            statement.setDate(3, new Date(obj.getBirthDay().getTime()));
+            statement.setString(4, obj.getLogin());
+            statement.setFloat(5, obj.getWeight());
+            statement.setBoolean(6, obj.isDeleted());
+            statement.setTimestamp(7, obj.getCreated());
+            statement.setTimestamp(8, obj.getChanged());
+            statement.setLong(9, obj.getId());
+
+            statement.executeUpdate();
+            return findById(obj.getId());
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException(SQL_ISSUE);
+        }
     }
 
     @Override
     public void delete(User obj) {
+        final String findByIdQuery = "delete from users where id = ?";
+
+        try {
+            Class.forName(properties.getDriverName());
+        } catch (ClassNotFoundException e) {
+            System.err.println(DRIVER_NOT_LOADED);
+            throw new RuntimeException(DRIVER_NOT_LOADED);
+        }
+
+        PreparedStatement statement = null;
+
+        String jdbcURL = properties.getUrl();
+        String login = properties.getLogin();
+        String password = properties.getPassword();
+
+        try (Connection connection = DriverManager
+                .getConnection(jdbcURL, login, password)) {
+            statement = connection.prepareStatement(findByIdQuery);
+            statement.setLong(1, obj.getId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException(SQL_ISSUE);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
     }
 
     @Override
