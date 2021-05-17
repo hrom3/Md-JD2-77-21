@@ -1,6 +1,7 @@
 package by.bsuir.beans;
 
 import by.bsuir.domain.Cars;
+import by.bsuir.domain.User;
 import by.bsuir.util.StringUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,5 +43,15 @@ public class AppBeans {
                 .price(156_000)
                 .dealerId(1L)
                 .build();
+    }
+
+    @Bean
+    public User user1(Cars car) {
+        return new User(car);
+    }
+
+    @Bean
+    public User user2(Cars car) {
+        return new User(car);
     }
 }

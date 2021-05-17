@@ -6,6 +6,7 @@ import by.bsuir.domain.User;
 import by.bsuir.repository.IDealerRepository;
 import by.bsuir.repository.IUserRepository;
 import by.bsuir.repository.impl.UserRepositoryImpl;
+import by.bsuir.service.UserService;
 import by.bsuir.util.StringUtil;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -27,6 +28,13 @@ public class SpringContextTesterMain {
 
         AnnotationConfigApplicationContext annotationConfigApplicationContext =
                 new AnnotationConfigApplicationContext("by.bsuir");
+
+        UserService userService = annotationConfigApplicationContext.getBean("userServiceImpl", UserService.class);
+
+        System.out.println(userService.findAll()
+                .stream()
+                .map(User::getSurname)
+                .collect(Collectors.joining(", ")));
 
         IUserRepository userRepository = annotationConfigApplicationContext.getBean(UserRepositoryImpl.class);
 //       IUserRepository userRepository = annotationConfigApplicationContext.
