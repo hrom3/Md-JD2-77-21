@@ -3,6 +3,7 @@ package by.bsuir.repository.impl;
 import by.bsuir.beans.DatabaseProperties;
 import by.bsuir.domain.User;
 import by.bsuir.exception.NoSuchEntityException;
+import by.bsuir.repository.IUserColumn;
 import by.bsuir.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,15 +22,6 @@ public class UserRepositoryImpl implements IUserRepository {
     //@Qualifier("databaseProperties")
     private DatabaseProperties properties;
 
-    private static final String ID = "id";
-    private static final String NAME = "name";
-    private static final String SURNAME = "surname";
-    private static final String BIRTH_DAY = "birth_date";
-    private static final String LOGIN = "login";
-    private static final String WEIGHT = "weight";
-    private static final String IS_DELETED = "is_deleted";
-    private static final String CREATED = "created";
-    private static final String CHANGED = "changed";
 
     private static final String DRIVER_NOT_LOADED =
             "JDBC Driver Cannot be loaded!";
@@ -263,15 +255,15 @@ public class UserRepositoryImpl implements IUserRepository {
     private User parseResultSetAsUser(ResultSet resultSet)
             throws SQLException {
         User user = new User();
-        user.setId(resultSet.getLong(ID));
-        user.setName(resultSet.getString(NAME));
-        user.setSurname(resultSet.getString(SURNAME));
-        user.setBirthDay(resultSet.getDate(BIRTH_DAY));
-        user.setLogin(resultSet.getString(LOGIN));
-        user.setWeight(resultSet.getFloat(WEIGHT));
-        user.setDeleted(resultSet.getBoolean(IS_DELETED));
-        user.setCreated(resultSet.getTimestamp(CREATED));
-        user.setChanged(resultSet.getTimestamp(CHANGED));
+        user.setId(resultSet.getLong(IUserColumn.ID));
+        user.setName(resultSet.getString(IUserColumn.NAME));
+        user.setSurname(resultSet.getString(IUserColumn.SURNAME));
+        user.setBirthDay(resultSet.getDate(IUserColumn.BIRTH_DAY));
+        user.setLogin(resultSet.getString(IUserColumn.LOGIN));
+        user.setWeight(resultSet.getFloat(IUserColumn.WEIGHT));
+        user.setDeleted(resultSet.getBoolean(IUserColumn.IS_DELETED));
+        user.setCreated(resultSet.getTimestamp(IUserColumn.CREATED));
+        user.setChanged(resultSet.getTimestamp(IUserColumn.CHANGED));
 
         return user;
     }

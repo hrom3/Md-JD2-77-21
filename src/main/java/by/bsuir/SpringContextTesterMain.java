@@ -8,6 +8,7 @@ import by.bsuir.repository.IUserRepository;
 import by.bsuir.repository.impl.UserRepositoryImpl;
 import by.bsuir.service.UserService;
 import by.bsuir.util.StringUtil;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -15,6 +16,9 @@ import java.util.stream.Collectors;
 
 public class SpringContextTesterMain {
     public static void main(String[] args) {
+
+        Logger log = Logger.getLogger(SpringContextTesterMain.class);
+        log.info("I am working!");
 
         ClassPathXmlApplicationContext xmlContext =
                 new ClassPathXmlApplicationContext("classpath:application-context.xml");
